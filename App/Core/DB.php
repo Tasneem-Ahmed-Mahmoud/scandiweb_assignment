@@ -38,7 +38,7 @@ class DB
     // Add where conditions and return the instance for chaining
     public function where($conditions)
     {
-        $conditionClause = "WHERE";
+        $conditionClause = "WHERE ";
         foreach ($conditions as $key => $value) {
             $conditionClause .= "$key = :$key AND ";
         }
@@ -46,35 +46,6 @@ class DB
         $this->conditionClause = $conditionClause;
         $this->conditions = $conditions;
 
-        return $this; // Enable method chaining
-    }
-
-    // public function whereIn($conditions){
-    //     $conditionClause = "WHERE";
-    //     foreach ($conditions as $key => $value) {
-    //         $conditionClause .= "$key IN ($value) AND ";
-    //     }
-    //     $conditionClause = rtrim($conditionClause, " AND ");
-    //     $this->conditionClause = $conditionClause;
-    //     $this->conditions = $conditions;
-    //     return $this; // Enable method chaining
-    // }
-    public function whereIn($conditions) {
-        $conditionClause = "WHERE ";
-        $params = [];
-        foreach ($conditions as $key => $values) {
-            if (!is_array($values)) {
-                $values = explode(',', $values); 
-            }
-            $placeholders = implode(',', array_fill(0, count($values), '?'));
-            $conditionClause .= "$key IN ($placeholders) AND ";
-            foreach ($values as $value) {
-                $params[] = $value;
-            }
-        }
-        $conditionClause = rtrim($conditionClause, " AND ");
-        $this->conditionClause = $conditionClause;
-        $this->conditions = $params;
         return $this; // Enable method chaining
     }
     
@@ -86,9 +57,10 @@ class DB
 
         try {
             $columns = implode(', ', $columns);
-            $sql = "SELECT $columns FROM " . $this->table;
+            $sql = "SELECT $columns FROM  `$this->table` " ;
+            // Add the condition clause if present
             if (!empty($this->conditionClause)) {
-                $sql .=  $this->conditionClause;
+                $sql .= " " . $this->conditionClause;
             }
             $stmt = $this->conn->prepare($sql);
 
@@ -96,15 +68,16 @@ class DB
             foreach ($this->conditions as $key => $value) {
                 $stmt->bindValue(':' . $key, $value);
             }
-
             $stmt->execute();
             $this->results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+     
             return $this; // Return the instance to enable further chaining
         } catch (PDOException $e) {
             die("Error: " . $e->getMessage());
         }
     }
 
+   
     // Insert data and return the instance for chaining
     public function insert(array $data)
     {
@@ -162,6 +135,8 @@ class DB
     // Get the results of the last executed query
     public function getResult()
     {
-        return $this->results;
+        
+        return  $this->results;
+           
     }
 }

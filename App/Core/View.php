@@ -12,6 +12,7 @@ class View
         if (file_exists($file)) {
 
             require $file;
+            die;
 
         } else {
             throw new \Exception('View not found: ' . $view);

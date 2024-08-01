@@ -9,30 +9,19 @@ abstract class Product
 
     protected $sku, $name, $price, $attribute, $type;
     protected static $table = "products";
-    public $errors = false;
+   protected $errors = false;
+    public $isUniqueSku = false;
+ 
     public static $types = [
         "DVD",
         "Book",
         "Furniture",
     ];
-    function __construct($name, $sku, $price)
-    {
-        $this->setName($name);
-        $this->setSku($sku);
-        $this->setPrice($price);
-
-
-    }
+   
+  
     abstract public function validateAttribute();
-    public function setName($name)
-    {
-        $this->name = $name;
-    }
-    public function getName()
-    {
-        return $this->name;
-    }
-    public function setSku($sku)
+  
+    public  function setSku($sku)
     {
         $this->sku = $sku;
     }
@@ -40,12 +29,22 @@ abstract class Product
     {
         return $this->sku;
     }
-    public function setPrice($price)
+  public function setName($name){
+
+    $this->name = $name;
+
+  }
+
+    public function getName()
     {
+        return $this->name;
+    }
+    public function setPrice($price){
+
         $this->price = $price;
     }
-    public function getPrice()
-    {
+    public function getPrice(){
+
         return $this->price;
     }
    
@@ -71,43 +70,28 @@ abstract class Product
 
     }
 
-    public function uniqueSku()
+    public  function uniqueSku($sku)
     {
-        return (new DB())->setTable(static::$table)->where(["sku" => $this->getSku()])->getResult();
+        return (new DB())->setTable(static::$table)->where(["sku" =>$sku])->select()->getResult();
     }
     public function getAttribute()
     {
         return '';
     }
-    protected function validateRequired()
-    {
-        $this->validateName();
-        $this->validateSku();
-        $this->validatePrice();
-        $this->validateAttribute();
-    }
-
-    private function validatePrice()
-    {
-        if ($this->getPrice() <= 0) {
-            $this->errors = true;
-        }
-    }
-    private function validateName()
-    {
-        if (empty($this->getName()) || !is_string($this->getName())) {
-            $this->errors = true;
-        }
-    }
-    private function validateSku()
-    {
-        if (empty($this->getSku()) || !empty($this->uniqueSku())) {
-            $this->errors = true;
-        }
-    }
-
    
-
-
+ protected    function validatePrice()
+    {
+        if (!is_numeric($this->price)) {
+            $this->errors = true;
+        }
+    }
+  protected function validateName()
+    {
+        if (empty($this->name) | !is_string($this->name)) {
+         
+            $this->errors = true;
+        }
+     
+    }
 
 }

@@ -16,25 +16,46 @@ class ProductController
 
     public function create()
     {
+
         View::load("products/create", ['types' => Product::$types]);
     }
+    // public function isUniqueSku()
+    // {
 
+    //    echo count(Product::uniqueSku($_POST['sku']));
+
+    // }
     public function store()
     {
 
         if (empty($_POST['type']) || !in_array($_POST['type'], Product::$types)) {
-
-            View::load("products/create", ['errors' => "please enter valid data", 'types' => Product::$types]);
+            echo "please inter valid data";
+            die;
         }
         $productType = "App\\Models\\ProductTypes\\" . $_POST['type'];
-        if (class_exists($productType)) {
-            $type = new $productType($_POST);
 
-            if ($type->errors) {
-                View::load("products/create", ['errors' => "please enter valid data", 'types' => Product::$types]);
+        if (class_exists($productType)) {
+
+            $type = new $productType();
+            foreach ($_POST as $key => $value) {
+                $setMethod = "set" . ucfirst($key);
+                if (method_exists($type, $setMethod)) {
+                    $type->$setMethod(trim(htmlspecialchars($value)));
+                }
+            }
+            if (count($type->uniqueSku($type->getSku()))) {
+                echo "please inter unique sku";
+                die;
+            }
+
+            if ($type->validateAttribute()) {
+                echo "please inter valid data";
+                die;
             } else {
+                $type->getAttribute();
                 $type->save();
-                header("Location: /");
+                echo "success";
+                die;
             }
 
         }

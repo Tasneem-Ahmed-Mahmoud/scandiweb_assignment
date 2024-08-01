@@ -7,19 +7,6 @@ use App\Models\Product;
 class Furniture extends Product
 {
     private $height, $width, $length;
-    public function __construct(array $attributes)
-    {
-        foreach ($attributes as $key => $value) {
-            $$key = trim(htmlspecialchars($value));
-        }
-        parent::__construct($name, $sku, $price);
-        $this->setHeight($height);
-        $this->setWidth($width);
-        $this->setLength($length);
-        $this->getAttribute();
-        $this->validateRequired();
-
-    }
 
     public function setHeight($height)
     {
@@ -56,36 +43,38 @@ class Furniture extends Product
 
     public function getAttribute()
     {
-       $this->attribute = "dimension:{$this->getHeight()} x {$this->getWidth()} x {$this->getLength()} ";
-    }
-
-    
-    public function validateAttribute()
-    {
-        $this->validatedHeight();
-        $this->validatedWidth();
-        $this->validatedLength();
-
+        $this->attribute = "dimension:{$this->getHeight()} x {$this->getWidth()} x {$this->getLength()} ";
     }
 
     private function validatedWidth()
     {
-        if ($this->getWidth() <= 0) {
+        if (!is_numeric($this->getWidth())) {
             $this->errors = true;
         }
     }
     private function validatedHeight()
     {
-        if ($this->getHeight() <= 0) {
+        if (!is_numeric($this->height)) {
             $this->errors = true;
         }
     }
 
     private function validatedLength()
     {
-        if ($this->getLength() <= 0) {
+        if (!is_numeric($this->length)) {
             $this->errors = true;
         }
+    }
+
+    public function validateAttribute()
+    {
+        $this->validateName();
+        $this->validatePrice();
+        $this->validatedHeight();
+        $this->validatedWidth();
+        $this->validatedLength();
+        return $this->errors;
+
     }
 
 }

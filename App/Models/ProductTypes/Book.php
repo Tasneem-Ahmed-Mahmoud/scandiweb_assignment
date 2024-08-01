@@ -8,16 +8,7 @@ class Book extends Product
 {
 
     private $weight;
-    public function __construct(array $attributes)
-    {
-        foreach ($attributes as $key => $value) {
-            $$key = trim(htmlspecialchars($value));
-        }
-        parent::__construct($name, $sku, $price);
-        $this->setWeight($weight);
-        $this->validateRequired();
-        $this->getAttribute();
-    }
+
     public function setWeight($weight)
     {
         $this->weight = $weight;
@@ -26,22 +17,26 @@ class Book extends Product
     {
         return $this->weight;
     }
-  
     public function getAttribute()
     {
-        $this->attribute = "Weight:{$this->getWeight()} kg";
+        $this->attribute = "Weight:{$this->weight} kg";
 
-    }
-    public function validateAttribute()
-    {
-        $this->validateWeight();
     }
 
     private function validateWeight()
     {
-        if (empty($this->getWeight()) || !is_numeric($this->getWeight())) {
-            parent::$errors = true;
+        if (!is_numeric($this->weight)) {
+            $this->errors = true;
         }
+    }
+
+    public function validateAttribute()
+    {
+        $this->validateName();
+        $this->validatePrice();
+        $this->validateWeight();
+        return $this->errors;
+
     }
 
 }

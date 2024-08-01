@@ -7,17 +7,7 @@ use App\Models\Product;
 class DVD extends Product
 {
     private $size;
-    function __construct(array $attributes)
-    {
-        foreach ($attributes as $key => $value) {
-            $$key = trim(htmlspecialchars($value));
-        }
-        parent::__construct($name, $sku, $price);
-        $this->setSize($size);
-        $this->getAttribute();
-        $this->validateRequired();
-    }
-
+    
     public function setSize($size)
     {
         $this->size = $size;
@@ -31,15 +21,19 @@ class DVD extends Product
     {
         $this->attribute = "Size: {$this->getSize()} MB";
     }
+  
     public function validateAttribute()
     {
+        $this->validateName();
+        $this->validatePrice();
         $this->validateSize();
+        return $this->errors;
 
     }
     private function validateSize()
     {
-        if (empty($this->getSize()) || !is_numeric($this->getSize())) {
-            parent::$errors = true;
+        if (!is_numeric($this->size)) {
+           $this->errors = true;
         }
     }
 }
