@@ -13,7 +13,6 @@ class DB
     private $conditionClause = "";
     private $results;
 
-    // Connect to the database
     private function connect()
     {
         if (!isset($this->conn)) {
@@ -26,16 +25,12 @@ class DB
             }
         }
     }
-
-    // Set the table and return the instance for chaining
     public function setTable($table)
     {
         $this->table = $table;
         
         return $this; // Enable method chaining
     }
-
-    // Add where conditions and return the instance for chaining
     public function where($conditions)
     {
         $conditionClause = "WHERE ";
@@ -46,11 +41,8 @@ class DB
         $this->conditionClause = $conditionClause;
         $this->conditions = $conditions;
 
-        return $this; // Enable method chaining
+        return $this; 
     }
-    
-
-    // Select data and return the instance for chaining
     public function select(array $columns = ['*'])
     {
         $this->connect();
@@ -58,27 +50,21 @@ class DB
         try {
             $columns = implode(', ', $columns);
             $sql = "SELECT $columns FROM  `$this->table` " ;
-            // Add the condition clause if present
             if (!empty($this->conditionClause)) {
                 $sql .= " " . $this->conditionClause;
             }
             $stmt = $this->conn->prepare($sql);
-
-            // Bind parameters
             foreach ($this->conditions as $key => $value) {
                 $stmt->bindValue(':' . $key, $value);
             }
             $stmt->execute();
             $this->results = $stmt->fetchAll(PDO::FETCH_ASSOC);
      
-            return $this; // Return the instance to enable further chaining
+            return $this; 
         } catch (PDOException $e) {
             die("Error: " . $e->getMessage());
         }
     }
-
-   
-    // Insert data and return the instance for chaining
     public function insert(array $data)
     {
         $this->connect();
@@ -94,8 +80,6 @@ class DB
             echo "Error: " . $e->getMessage();
         }
     }
-
-    // Delete data and return the instance for chaining
     public function delete($id=null)
     {
         $this->connect();
@@ -109,7 +93,6 @@ class DB
             echo "Error: " . $e->getMessage();
         }
     }
-
     public function deleteMultiple(array $ids)
     {
         $this->connect();
@@ -130,13 +113,8 @@ class DB
             echo "Error: " . $e->getMessage();
         }
     }
-    
-
-    // Get the results of the last executed query
     public function getResult()
-    {
-        
-        return  $this->results;
-           
+    {   
+        return  $this->results;      
     }
 }

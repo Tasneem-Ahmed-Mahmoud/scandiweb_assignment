@@ -9,9 +9,6 @@
 </head>
 
 <body>
-
-
-
   <section>
     <div class="container">
       <div class="row">
@@ -57,9 +54,9 @@
             <div class="col-sm-10">
               <select class="form-select" id="productType" name="type">
                 <option selected>Type Switcher</option>
-                <?php foreach ($types as $type) : ?>
-                  <option value="<?= $type ?>"><?= $type ?></option>
-                <?php endforeach; ?>
+                <?php foreach ($types as $type): ?>
+                  <option value="<?=$type?>"><?=$type?></option>
+                <?php endforeach;?>
               </select>
             </div>
           </div>
@@ -109,8 +106,6 @@
       </div>
     </div>
   </section>
-
-
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
   <script>

@@ -7,7 +7,6 @@ use App\Models\Product;
 
 class ProductController
 {
-
     public function index()
     {
         $products = Product::get();
@@ -19,12 +18,7 @@ class ProductController
 
         View::load("products/create", ['types' => Product::$types]);
     }
-    // public function isUniqueSku()
-    // {
 
-    //    echo count(Product::uniqueSku($_POST['sku']));
-
-    // }
     public function store()
     {
 
@@ -57,9 +51,7 @@ class ProductController
                 echo "success";
                 die;
             }
-
         }
-
     }
 
     public function destroy()
@@ -67,5 +59,4 @@ class ProductController
         Product::delete($_POST['ids']);
         echo "deleted successfully";
     }
-
 }
