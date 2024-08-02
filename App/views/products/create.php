@@ -15,7 +15,7 @@
         <div class=" d-flex justify-content-between align-items-center py-5">
           <h1>Product Add</h1>
           <div class="buts">
-            <button class="btn btn-primary  text-capitalize" id="save" type="submit">save</button>
+            <button class="btn btn-primary  text-capitalize" id="save" type="submit">Save</button>
             <a class="btn btn-danger  text-capitalize " href="/" id="cancel">Cancel</a>
           </div>
         </div>
